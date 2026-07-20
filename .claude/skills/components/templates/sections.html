@@ -1,0 +1,72 @@
+<!-- Canonical section markup. Copy blocks as needed; keep BEM-lite names. -->
+
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a class="site-header__logo" href="index.html"><!-- logo/text --></a>
+    <nav class="site-nav" aria-label="Main" data-nav>
+      <button class="site-nav__toggle" data-nav-toggle aria-expanded="false"
+              aria-controls="nav-list">Menu</button>
+      <ul class="site-nav__list" id="nav-list"><!-- <li><a> --></ul>
+    </nav>
+    <a class="btn btn--primary site-header__cta" href="tel:"><!-- phone/CTA --></a>
+  </div>
+</header>
+
+<section class="section section--services" id="services">
+  <div class="container">
+    <h2 class="section__title"><!-- --></h2>
+    <div class="card-grid">
+      <article class="card" data-animate>
+        <h3 class="card__title"><!-- --></h3>
+        <p class="card__body"><!-- --></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--testimonials" id="testimonials">
+  <div class="container">
+    <h2 class="section__title"><!-- --></h2>
+    <div class="card-grid">
+      <figure class="testimonial" data-animate>
+        <blockquote class="testimonial__quote"><!-- verbatim --></blockquote>
+        <figcaption class="testimonial__author"><!-- name --></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section section--faq" id="faq">
+  <div class="container">
+    <h2 class="section__title"><!-- --></h2>
+    <details class="faq__item">
+      <summary class="faq__q"><!-- question --></summary>
+      <p class="faq__a"><!-- answer --></p>
+    </details>
+  </div>
+</section>
+
+<section class="section section--cta" id="cta">
+  <div class="container cta__inner">
+    <h2 class="cta__title"><!-- --></h2>
+    <a class="btn btn--primary" href="#contact"><!-- CTA --></a>
+  </div>
+</section>
+
+<section class="section section--contact" id="contact">
+  <div class="container contact__grid">
+    <div class="contact__info">
+      <h2 class="section__title"><!-- --></h2>
+      <address class="contact__address"><!-- from client.md, verbatim --></address>
+      <a href="tel:"><!-- phone --></a> · <a href="mailto:"><!-- email --></a>
+    </div>
+    <div class="contact__form"><!-- forms skill inserts here --></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p><!-- (c) year business name --></p>
+    <nav aria-label="Footer"><ul class="site-footer__links"><!-- --></ul></nav>
+  </div>
+</footer>

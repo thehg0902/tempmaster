@@ -1,0 +1,12 @@
+node_modules/
+deliverables/
+.obsidian/
+.DS_Store
+*.log
+.env
+client/assets-intake/originals/
+client/assets-intake/slots/*
+!client/assets-intake/slots/SHOPPING_LIST.md
+!client/assets-intake/slots/.gitkeep
+preview/*
+!preview/.gitkeep
