@@ -1,0 +1,2 @@
+/* Contact page — page-specific spacing only; components live in base.css. */
+.section--contact .contact-grid{margin-top:var(--space-8)}

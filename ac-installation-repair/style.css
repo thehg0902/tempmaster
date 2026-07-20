@@ -1,0 +1,18 @@
+/* AC Installation & Repair page — split sections + checklists. */
+.split-grid{display:grid;gap:var(--space-8);align-items:center}
+@media (min-width:900px){
+  .split-grid{grid-template-columns:1.1fr 1fr}
+  .split-grid--flip{grid-template-columns:1fr 1.1fr}
+  .split-grid--flip > div{order:2}
+  .split-grid--flip > img{order:1}
+}
+.split-grid img{border-radius:var(--radius-lg);box-shadow:var(--shadow-md);width:100%;height:auto}
+.split-grid h2{max-width:22ch}
+.split-grid > div > p{margin-top:var(--space-4);color:var(--color-text-muted)}
+.check-list{margin-top:var(--space-6);display:grid;gap:var(--space-3)}
+.check-list li{display:flex;gap:var(--space-3);align-items:flex-start}
+.check-list li::before{content:"";flex:none;width:20px;height:20px;margin-top:2px;
+  border-radius:var(--radius-full);
+  background:var(--color-accent);
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="3" d="M4 12l5 5 11-11"/></svg>') center/contain no-repeat;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="3" d="M4 12l5 5 11-11"/></svg>') center/contain no-repeat}

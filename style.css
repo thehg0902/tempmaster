@@ -1,0 +1,177 @@
+/* Home page styles — loader, overlay header, full-bleed hero video stage,
+   floating trust stats, and home-only sections. Base components: shared/base.css. */
+
+/* ---------- loading screen ---------- */
+.loader{position:fixed;inset:0;z-index:100;background:var(--color-charcoal);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-6);
+  transition:opacity var(--duration-slow) var(--ease-standard),
+    visibility 0s linear var(--duration-slow)}
+.loader.is-done{opacity:0;visibility:hidden}
+.loader img{height:72px;width:auto}
+.loader__line{width:min(220px,50vw);height:3px;border-radius:var(--radius-full);
+  overflow:hidden;background:rgba(255,255,255,.12);position:relative}
+.loader__line::after{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(90deg,var(--color-primary),var(--color-surface),var(--color-accent));
+  transform:translateX(-100%)}
+@media (prefers-reduced-motion: no-preference){
+  .loader__line::after{animation:loader-sweep 1.2s var(--ease-standard) infinite}
+}
+@keyframes loader-sweep{to{transform:translateX(100%)}}
+/* no-JS: the loader must never block the page */
+html:not(.js) .loader{display:none}
+
+/* ---------- header on the home page: fixed overlay over the video ---------- */
+.page-home .site-header{position:fixed;top:0;left:0;right:0;background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard)}
+.page-home .site-header.is-scrolled{background:var(--color-surface);
+  border-color:var(--color-border);box-shadow:var(--shadow-sm)}
+.page-home .site-header:not(.is-scrolled) .primary-nav a{color:var(--color-surface)}
+.page-home .site-header:not(.is-scrolled) .phone-link{color:var(--color-surface)}
+.page-home .site-header:not(.is-scrolled) .hamburger span{background:var(--color-surface)}
+
+/* header entrance: hidden until the background is fully revealed */
+html.js .page-home .site-header{transform:translateY(-100%)}
+html.js .page-home .site-header.is-revealed{transform:translateY(0);
+  transition:transform var(--duration-slow) var(--ease-out-expo),
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard)}
+@media (prefers-reduced-motion: reduce){
+  html.js .page-home .site-header{transform:none;transition:none}
+}
+
+/* ---------- pinned video stage (hero + trust share one locked viewport) ----------
+   Wrapper is a 200svh scroll runway; the stage pins via `sticky` for one
+   viewport while the hero layer scrolls out, the video plays, and the
+   trust layer scrolls in — driven by site/script.js (transform/opacity only). */
+.hero-stage-wrapper{position:relative;height:200svh}
+.hero-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--color-charcoal)}
+.hero-stage__media{position:absolute;inset:0;overflow:hidden;z-index:0}
+.hero-stage__media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:opacity var(--duration-base) var(--ease-standard)}
+.hero-stage__media [data-hero-transition]{opacity:0}
+.hero-stage__overlay{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,24,32,.80) 0%,rgba(18,24,32,.68) 50%,rgba(18,24,32,.80) 100%)}
+
+.hero-stage__layer{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column}
+.hero-stage__layer--hero{justify-content:center;padding-top:76px} /* clears the transparent header */
+.hero-stage__layer--trust{justify-content:center;padding-top:76px} /* overlay centered on the video, not bottom-anchored */
+.hero-stage .section--hero,.hero-stage .section--trust{position:static;background:transparent;
+  width:100%;padding-block:0}
+
+/* JS drives these once motion is allowed; static/stacked otherwise (reduced-motion fallback) */
+@media (prefers-reduced-motion: no-preference){
+  html.js .hero-stage__layer{will-change:transform,opacity;
+    transition:transform var(--duration-fast) linear,opacity var(--duration-fast) linear}
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-stage-wrapper{height:auto}
+  .hero-stage{position:relative;height:auto;min-height:100svh}
+  .hero-stage__layer{position:static;display:block}
+  .hero-stage__layer--trust{margin-top:var(--space-6)}
+}
+
+/* hero content over the video */
+.hero__copy{max-width:44rem;padding-block:var(--space-10)}
+.hero__copy .eyebrow{color:var(--color-ice-blue)}
+.hero__copy h1{color:var(--color-surface);margin-top:var(--space-3)}
+.hero__accent{color:var(--color-primary)}
+.hero-stage .hero__lede{color:var(--color-mist)}
+.hero__copy .btn--outline{border-color:var(--color-surface);color:var(--color-surface)}
+
+/* float-up entrance sequence (runs after the loader fades) */
+@media (prefers-reduced-motion: no-preference){
+  html.js .float-seq > *{opacity:0;transform:translateY(22px)}
+  html.js .is-revealed .float-seq > *{opacity:1;transform:none;
+    transition:opacity var(--duration-slow) var(--ease-out-expo),
+      transform var(--duration-slow) var(--ease-out-expo);
+    transition-delay:calc(var(--seq,0) * 140ms)}
+}
+
+/* ---------- trust stats: borderless, floating on the video ---------- */
+.trust-card{display:grid;gap:var(--space-5);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));
+  padding-block:var(--space-5)}
+.trust-card__stat{display:flex;align-items:center;gap:var(--space-3);padding-inline:var(--space-4)}
+.trust-card__stat + .trust-card__stat{border-left:1px solid rgba(255,255,255,.22)}
+.trust-card__stat svg{flex:none;color:var(--color-primary);filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.trust-card__stat strong{display:block;font-family:var(--font-heading);
+  font-size:var(--text-lg);color:var(--color-surface);text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.trust-card__stat span{display:block;color:var(--color-mist);font-size:var(--text-sm);
+  text-shadow:0 1px 4px rgba(0,0,0,.5)}
+@media (max-width:899px){
+  .trust-card__stat + .trust-card__stat{border-left:0;
+    border-top:1px solid rgba(255,255,255,.22);padding-top:var(--space-4)}
+}
+
+/* ---------- review marquee: continuously auto-scrolling, borderless chips ---------- */
+.review-marquee{margin-top:var(--space-6);overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,var(--color-text) 8%,var(--color-text) 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,var(--color-text) 8%,var(--color-text) 92%,transparent)}
+.review-marquee__track{display:flex;gap:var(--space-4);width:max-content}
+.review-chip{flex:none;width:min(80vw,20rem);background:rgba(248,250,252,.12);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.18);border-radius:var(--radius-md);
+  padding:var(--space-4) var(--space-5)}
+.review-chip__stars{color:var(--color-primary);letter-spacing:2px;font-size:var(--text-sm);
+  margin-bottom:var(--space-2)}
+.review-chip p{color:var(--color-surface);font-size:var(--text-sm);text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.review-chip span{display:block;margin-top:var(--space-2);color:var(--color-mist);
+  font-size:var(--text-xs);font-weight:600}
+@media (prefers-reduced-motion: no-preference){
+  .review-marquee__track{animation:review-marquee 28s linear infinite}
+  .review-marquee:hover .review-marquee__track{animation-play-state:paused}
+}
+@keyframes review-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){
+  .review-marquee{overflow-x:auto}
+}
+
+/* ---------- why choose us ---------- */
+.section--about{background:var(--color-ice-blue)}
+.about-grid{display:grid;gap:var(--space-8)}
+@media (min-width:900px){.about-grid{grid-template-columns:.85fr 1.15fr;align-items:start}}
+.about-list{display:grid;gap:var(--space-5);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr))}
+.about-list__item{display:flex;gap:var(--space-4)}
+.about-list__icon{flex:none;width:44px;height:44px;border-radius:var(--radius-md);
+  background:var(--color-surface);display:flex;align-items:center;justify-content:center;
+  color:var(--color-primary);box-shadow:var(--shadow-sm)}
+.about-list__item h3{margin-bottom:var(--space-1)}
+.about-list__item p{color:var(--color-text-muted);font-size:var(--text-sm)}
+
+/* ---------- services ---------- */
+.service-featured{background:var(--color-surface);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);padding:var(--space-7);display:grid;gap:var(--space-6);
+  margin-block:var(--space-6);border:2px solid var(--color-primary)}
+@media (min-width:800px){.service-featured{grid-template-columns:1.2fr 1fr;align-items:center}}
+.service-featured__tag{display:inline-block;background:var(--color-primary);
+  color:var(--color-surface);font-size:var(--text-xs);font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:.3em .8em;border-radius:var(--radius-full);
+  margin-bottom:var(--space-3)}
+.service-featured h3{font-size:var(--text-2xl)}
+.service-featured p{margin-top:var(--space-3);color:var(--color-text-muted)}
+.service-featured .btn{margin-top:var(--space-5)}
+.service-featured img{border-radius:var(--radius-md);width:100%;height:auto}
+.service-grid{display:grid;gap:var(--space-5);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr))}
+.services-cta-line{margin-top:var(--space-7);color:var(--color-text-muted)}
+.services-cta-line a{color:var(--color-accent-text);font-weight:700}
+
+/* ---------- testimonials ---------- */
+.section--testimonials{background:var(--color-surface)}
+.testimonial-grid{display:grid;gap:var(--space-5);margin-top:var(--space-6);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))}
+.testimonial-card{background:var(--color-bg);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-6)}
+.testimonial-card .stars{color:var(--color-primary);letter-spacing:2px;
+  margin-bottom:var(--space-3)}
+.testimonial-card footer{margin-top:var(--space-4);font-size:var(--text-sm);
+  color:var(--color-text-muted);font-weight:600}
+
+/* ---------- faq + contact bands ---------- */
+.section--faq{background:var(--color-ice-blue)}
+.section--contact{background:var(--color-surface)}
