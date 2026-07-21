@@ -170,6 +170,14 @@
       trustLayer.style.transform = 'translateY(' + ((1 - trustP) * TRUST_TRAVEL) + 'px)';
       trustLayer.style.opacity = String(trustP);
 
+      // Both layers stack absolutely at the same z-index; opacity:0 does NOT stop
+      // pointer events, so whichever is on top eats clicks. Gate hit-testing on
+      // visibility: hero clickable until it has fully faded, trust only once it
+      // starts scrolling in — otherwise the invisible trust layer swallows the
+      // hero's "Get a Free Quote" button.
+      heroLayer.style.pointerEvents = heroP >= 1 ? 'none' : 'auto';
+      trustLayer.style.pointerEvents = trustP > 0 ? 'auto' : 'none';
+
       // scrubP is valid whether or not the scrub is active yet: at rest it clamps
       // to 0 (loop showing -> FOCUS_START, matching the loop/first frame). Drives
       // both the mobile focal point (always) and the drawn frame (when active).

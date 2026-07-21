@@ -73,7 +73,7 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
 
 .hero-stage__layer{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column}
 .hero-stage__layer--hero{justify-content:center;padding-top:76px} /* clears the transparent header */
-.hero-stage__layer--trust{justify-content:center;padding-top:76px} /* overlay centered on the video, not bottom-anchored */
+.hero-stage__layer--trust{justify-content:center;padding-top:76px;pointer-events:none} /* overlay centered on the video, not bottom-anchored; at rest it sits (invisible) over the hero, so it must not eat hero clicks — JS re-enables it once it scrolls in */
 .hero-stage .section--hero,.hero-stage .section--trust{position:static;background:transparent;
   width:100%;padding-block:0}
 
