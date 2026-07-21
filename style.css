@@ -64,7 +64,10 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
   .hero-stage__media video,.hero-stage__media canvas{
     object-position:var(--hero-focus-x,75%) center}
 }
-.hero-stage__overlay{position:absolute;inset:0;
+/* Scrim gradient is at its FULL (trust-legible) strength; script.js lightens it
+   via --scrim-opacity over the dark hero scene and ramps back to full as the
+   bright indoor trust scene scrolls in. Fallback 1 = full/safe for no-JS. */
+.hero-stage__overlay{position:absolute;inset:0;opacity:var(--scrim-opacity,1);
   background:linear-gradient(180deg,rgba(18,24,32,.80) 0%,rgba(18,24,32,.68) 50%,rgba(18,24,32,.80) 100%)}
 
 .hero-stage__layer{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column}
@@ -85,8 +88,11 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
   .hero-stage__layer--trust{margin-top:var(--space-6)}
 }
 
-/* hero content over the video */
+/* hero content over the video — text-shadow keeps it legible now that the
+   overlay scrim is lighter (matches the trust-stat treatment) */
 .hero__copy{max-width:44rem;padding-block:var(--space-10)}
+.hero__copy .eyebrow,.hero__copy h1,.hero-stage .hero__lede{
+  text-shadow:0 1px 6px rgba(0,0,0,.45)}
 .hero__copy .eyebrow{color:var(--color-ice-blue)}
 .hero__copy h1{color:var(--color-surface);margin-top:var(--space-3)}
 .hero__accent{color:var(--color-primary)}

@@ -137,11 +137,18 @@
     // media query (desktop keeps its AC-right / text-left composition). Tune by
     // eye — higher FOCUS_START = AC further right at the top of the scroll.
     var FOCUS_START = 78, FOCUS_END = 31; // object-position % at scrubP 0 and 1
+    // Overlay scrim multiplier: lighter over the dark hero scene, ramping to
+    // full (1) over the bright indoor trust scene so the review text stays
+    // legible. base gradient is .80/.68/.80; SCRIM_HERO*base is the hero look.
+    var SCRIM_HERO = 0.70;
 
     var scrubActive = false; // whether the crossfade to canvas has happened
     var lastY = -1;
 
-    if (stage) stage.style.setProperty('--hero-focus-x', FOCUS_START + '%'); // pre-scroll paint
+    if (stage) {
+      stage.style.setProperty('--hero-focus-x', FOCUS_START + '%'); // pre-scroll paint
+      stage.style.setProperty('--scrim-opacity', String(SCRIM_HERO));
+    }
 
     function progress() {
       var rect = wrapper.getBoundingClientRect();
@@ -169,6 +176,10 @@
       if (stage) {
         stage.style.setProperty('--hero-focus-x',
           (FOCUS_START + (FOCUS_END - FOCUS_START) * scrubP).toFixed(1) + '%');
+        // scrim darkens with the scrub: SCRIM_HERO (light) -> 1 (full) as the
+        // bright trust scene comes in, keeping the review text legible.
+        stage.style.setProperty('--scrim-opacity',
+          (SCRIM_HERO + (1 - SCRIM_HERO) * scrubP).toFixed(3));
       }
 
       if (scrub && scrub.ready() && loopVideo) {
