@@ -1,4 +1,4 @@
-# Contract: Design Tokens  (v1.1.0)
+# Contract: Design Tokens  (v1.2.0)
 
 All visual values are CSS custom properties defined ONCE in
 `site/shared/tokens.css` on `:root`. No component may hardcode a color,
@@ -7,8 +7,8 @@ font size, spacing value, radius, shadow, or duration.
 ## Required token set
 
 Colors:        --color-primary, --color-primary-dark, --color-accent,
-               --color-bg, --color-surface, --color-text, --color-text-muted,
-               --color-border, --color-success, --color-error
+               --color-accent-text, --color-bg, --color-surface, --color-text,
+               --color-text-muted, --color-border, --color-success, --color-error
 Typography:    --font-heading, --font-body,
                --text-xs, --text-sm, --text-base, --text-lg, --text-xl,
                --text-2xl, --text-3xl, --text-hero  (rem-based modular scale)
@@ -26,3 +26,8 @@ Motion:        --duration-fast (150ms), --duration-base (300ms),
 3. Dark variants (if used) override on `[data-theme="dark"]`, same names.
 4. Adding a token = append here first (bump minor), then to tokens.css.
 5. Renaming/removing a token = breaking change (bump major). Avoid.
+6. --color-accent-text (v1.2.0): a darkened, WCAG-AA-body-safe variant of
+   --color-accent, for when the accent hue must render as body-sized text
+   (e.g. inline links) and --color-accent itself fails 4.5:1 there. Use
+   --color-accent for icons/large UI/borders/large text; --color-accent-text
+   for anything smaller.

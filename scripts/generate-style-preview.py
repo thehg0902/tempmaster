@@ -45,7 +45,7 @@ PAIRINGS = [  # (fg, bg, label, AA threshold)
     ("--color-text", "--color-bg", "body text / page bg", 4.5),
     ("--color-text-muted", "--color-bg", "muted text / page bg", 4.5),
     ("--color-text", "--color-surface", "text / surface (cards)", 4.5),
-    ("--color-bg", "--color-primary", "button label / primary", 4.5),
+    ("--color-surface", "--color-primary", "button label / primary", 4.5),
 ]
 
 def pairing_rows():
@@ -123,7 +123,7 @@ h2{{font-family:var(--font-heading,serif);border-bottom:1px solid var(--color-bo
 .s-lg{{box-shadow:var(--shadow-lg)}}
 .btn{{display:inline-block;padding:.7rem 1.4rem;border-radius:var(--radius-full,999px);
   font-weight:600;text-decoration:none;margin-right:1rem}}
-.btn-primary{{background:var(--color-primary);color:var(--color-bg)}}
+.btn-primary{{background:var(--color-primary);color:var(--color-surface)}}
 .btn-secondary{{border:2px solid var(--color-primary);color:var(--color-primary)}}
 input{{background:var(--color-surface);color:var(--color-text);
   border:1px solid var(--color-border);border-radius:var(--radius-sm);
@@ -134,7 +134,7 @@ input{{background:var(--color-surface);color:var(--color-text);
   line-height:var(--leading-tight,1.1);margin:0 0 1rem}}
 .hero p{{color:var(--color-text-muted);max-width:38rem;margin:0 auto 1.5rem}}
 .motion{{display:inline-block;padding:.6rem 1.2rem;background:var(--color-accent);
-  color:var(--color-bg);border-radius:var(--radius-md)}}
+  color:var(--color-surface);border-radius:var(--radius-md)}}
 @media (prefers-reduced-motion: no-preference){{
   .motion{{transition:transform var(--duration-base,300ms) var(--ease-standard,ease)}}
   .motion:hover{{transform:translateY(-4px) scale(1.04)}}}}

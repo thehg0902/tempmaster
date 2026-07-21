@@ -269,7 +269,9 @@ for s in slots:
     print(f"[{s['name']}] treatment={t}")
     if t == "scroll-scrub":
         res = do_scrub(f, s["name"])
-    elif t in ("loop", "intro-loop"):
+    elif t in ("loop", "intro-loop") or f.suffix.lower() in (".mp4", ".mov", ".webm"):
+        # any video-file slot with a custom/unknown treatment still gets the
+        # standard video encode (budget ladder + faststart), never the image path
         res = do_video(f, s["name"])
     else:
         res = do_image(f, s["name"])
