@@ -1,0 +1,19 @@
+/* Privacy Policy page — readable long-form legal typography.
+   Components (header/footer/buttons/nav) come from shared/base.css. */
+.legal{padding-top:calc(var(--section-pad-y) + var(--space-6))}
+.legal__container{max-width:52rem}
+.legal h1{margin-top:var(--space-3)}
+.legal__updated{color:var(--color-text-muted);font-size:var(--text-sm);
+  margin-top:var(--space-2);margin-bottom:var(--space-7)}
+.legal h2{font-size:var(--text-xl);margin-top:var(--space-9);margin-bottom:var(--space-3)}
+.legal h3{font-size:var(--text-base);margin-top:var(--space-5);margin-bottom:var(--space-2);
+  color:var(--color-text)}
+.legal p{margin-bottom:var(--space-4);color:var(--color-text-muted);line-height:var(--leading-loose)}
+.legal p strong,.legal li strong{color:var(--color-text)}
+.legal ul{margin:0 0 var(--space-4) var(--space-5);list-style:disc;color:var(--color-text-muted)}
+.legal li{margin-bottom:var(--space-2);line-height:var(--leading-normal)}
+.legal a{color:var(--color-accent-text);font-weight:600}
+.legal a:hover{text-decoration:underline}
+.legal__governing{margin-top:var(--space-8);padding-top:var(--space-5);
+  border-top:1px solid var(--color-border);font-size:var(--text-sm)}
+.legal__back{margin-top:var(--space-6);font-weight:700}
