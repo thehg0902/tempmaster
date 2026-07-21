@@ -96,9 +96,8 @@
                poster="assets/images/hero-loop-poster.webp">
           <source src="assets/video/hero-loop.mp4" type="video/mp4">
         </video>
-        <video data-hero-transition muted playsinline preload="metadata">
-          <source src="assets/video/hero-transition.mp4" type="video/mp4">
-        </video>
+        <canvas data-hero-scrub data-manifest="assets/images/scrub/hero-transition/manifest.json"
+                aria-hidden="true"></canvas>
         <div class="hero-stage__overlay"></div>
       </div>
 
@@ -219,7 +218,7 @@
           <p>A new system sized right for your home, or a same-day fix for the one you have. It's the work we do most — and the work we're known for in Richmond Hill.</p>
           <a class="btn btn--primary" href="ac-installation-repair/">Explore AC Services</a>
         </div>
-        <img src="assets/images/services-ac.webp" alt="Temp Master technician servicing an outdoor AC unit" width="800" height="500" loading="lazy">
+        <img src="assets/images/gallery-wall-mount-ac.webp" alt="Wall-mounted outdoor AC unit installed by Temp Master" width="750" height="1000" loading="lazy">
       </div>
 
       <ul class="service-grid">
@@ -249,6 +248,40 @@
         </li>
       </ul>
       <p class="services-cta-line">Not sure what you need? <a href="tel:+14168908550">Call (416) 890-8550</a> and describe the problem — we'll tell you straight.</p>
+    </div>
+  </section>
+
+  <section class="section section--gallery" id="gallery">
+    <div class="container">
+      <p class="eyebrow">Our Work</p>
+      <div class="rule" aria-hidden="true"></div>
+      <h2>Real jobs, done right.</h2>
+      <ul class="gallery-grid">
+        <li class="gallery-item">
+          <img src="assets/images/gallery-furnace-install.webp" alt="New Lennox furnace installation" width="750" height="1000" loading="lazy">
+          <span>Furnace Installation</span>
+        </li>
+        <li class="gallery-item">
+          <img src="assets/images/gallery-ductless-condenser.webp" alt="Ductless mini-split outdoor condenser installation" width="750" height="1000" loading="lazy">
+          <span>Ductless AC Install</span>
+        </li>
+        <li class="gallery-item">
+          <img src="assets/images/gallery-wall-mount-ac.webp" alt="Wall-mounted outdoor AC unit installation on a home exterior" width="750" height="1000" loading="lazy">
+          <span>Wall-Mount AC Install</span>
+        </li>
+        <li class="gallery-item">
+          <img src="assets/images/gallery-commercial-rooftop.webp" alt="Commercial rooftop AC units installation" width="1000" height="750" loading="lazy">
+          <span>Commercial Rooftop Units</span>
+        </li>
+        <li class="gallery-item">
+          <img src="assets/images/gallery-ductless-indoor-unit.webp" alt="Ductless mini-split indoor unit installation" width="750" height="1000" loading="lazy">
+          <span>Ductless Indoor Unit</span>
+        </li>
+        <li class="gallery-item">
+          <img src="assets/images/gallery-commercial-ductwork.webp" alt="Commercial ductwork installation" width="750" height="1000" loading="lazy">
+          <span>Commercial Ductwork</span>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -293,7 +326,7 @@
         </details>
         <details data-accordion>
           <summary>My AC just died — how fast can you get here?</summary>
-          <p>We're open 24 hours, so call the moment it happens: (416) 890-8550. As an owner-operated company, you're talking directly to the person handling your job, not a call centre. [PLACEHOLDER: specific response-time commitment, e.g. "within 2 hours" — pending confirmation]</p>
+          <p>We're open 24 hours, so call the moment it happens: (416) 890-8550. As an owner-operated company, you're talking directly to the person handling your job, not a call centre — we answer and get moving right away.</p>
         </details>
         <details data-accordion>
           <summary>Do you only do AC, or the rest of my HVAC too?</summary>

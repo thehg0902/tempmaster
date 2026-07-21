@@ -6,7 +6,8 @@
   .split-grid--flip > div{order:2}
   .split-grid--flip > img{order:1}
 }
-.split-grid img{border-radius:var(--radius-lg);box-shadow:var(--shadow-md);width:100%;height:auto}
+.split-grid img{border-radius:var(--radius-lg);box-shadow:var(--shadow-md);width:100%;
+  aspect-ratio:4/3;object-fit:cover}
 .split-grid h2{max-width:22ch}
 .split-grid > div > p{margin-top:var(--space-4);color:var(--color-text-muted)}
 .check-list{margin-top:var(--space-6);display:grid;gap:var(--space-3)}
