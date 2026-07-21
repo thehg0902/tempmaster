@@ -123,8 +123,8 @@
     var HERO_TRAVEL = 70;      // px the hero drifts up while fading
     var TRUST_TRAVEL = 60;     // px the trust stats travel up from below
 
-    var ticking = false;
     var scrubActive = false; // whether the crossfade to canvas has happened
+    var lastY = -1;
 
     function progress() {
       var rect = wrapper.getBoundingClientRect();
@@ -135,7 +135,6 @@
     }
 
     function apply() {
-      ticking = false;
       var p = progress();
 
       var heroP = Math.min(1, p / HERO_OUT_END);
@@ -172,8 +171,19 @@
       if (headerEl) headerEl.classList.toggle('is-scrolled', p >= 0.98);
     }
 
+    // Drive apply() straight off the scroll event, guarded by a scrollY-change
+    // check. The work is cheap (one rect read, then transform/opacity writes +
+    // a guarded canvas draw) and the browser already rate-limits scroll events
+    // to ~once per frame. Deliberately NOT gated behind requestAnimationFrame:
+    // rAF is throttled/suspended whenever the page renders hidden (embedded
+    // preview panes, background tabs), which would silently freeze the scrub on
+    // the loop's first frame and leave "just a video playing". Reading the rect
+    // before any write keeps this thrash-free within each call.
     window.addEventListener('scroll', function () {
-      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
+      var y = window.scrollY || window.pageYOffset || 0;
+      if (y === lastY) return;
+      lastY = y;
+      apply();
     }, { passive: true });
     apply();
   })();
