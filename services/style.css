@@ -1,5 +1,7 @@
 /* Services page — service detail list. */
 .service-detail-list{display:grid;gap:var(--space-5)}
 @media (min-width:900px){.service-detail-list{grid-template-columns:1fr 1fr}}
+.service-detail .svc-icon{width:48px;height:48px;display:block;padding:var(--space-2);
+  background:var(--color-ice-blue);border-radius:var(--radius-md);margin-bottom:var(--space-3)}
 .service-detail h2{font-size:var(--text-xl);margin-bottom:var(--space-3)}
 .service-detail p{color:var(--color-text-muted);font-size:var(--text-base)}
