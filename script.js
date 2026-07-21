@@ -55,36 +55,44 @@
   }
 
   // ---- scroll-scrub loader: canvas + preloaded webp frames ----
-  // Frame 0001 loads first and stands as the poster; progressive preload
-  // (every 4th frame, then backfill) means scrubbing degrades to slightly
-  // steppy on a slow connection, never blank (references/scroll-scrub.md).
+  // The manifest is read INLINE from the canvas's data-* attributes, NOT via
+  // fetch(): fetch() of a local file is blocked under the file:// protocol, so a
+  // fetch-based load would silently fail on a double-clicked site/index.html and
+  // leave "just the video" — breaking the file-structure contract's "openable
+  // standalone, no server" guarantee. The frame images themselves load fine over
+  // file:// (plain <img> src). manifest.json still lives on disk as the ingest
+  // record; these attributes mirror it. Frame 0001 loads first and stands as the
+  // poster; progressive preload (every 4th, then backfill) keeps scrubbing from
+  // ever going blank on a slow connection (references/scroll-scrub.md).
   var scrub = (function () {
     if (!canvas || !canvas.getContext) return null;
     var ctx = canvas.getContext('2d');
-    var frames = [], manifest = null, current = -1;
+    var frames = [], current = -1;
 
-    fetch(canvas.getAttribute('data-manifest'))
-      .then(function (r) { return r.json(); })
-      .then(function (m) {
-        manifest = m;
-        canvas.width = m.width;
-        canvas.height = m.height;
-        var base = canvas.getAttribute('data-manifest').replace(/manifest\.json$/, '');
-        function src(i) { return base + m.pattern.replace('%04d', String(i + 1).padStart(4, '0')); }
-        function load(i, cb) {
-          if (frames[i]) { if (cb) cb(); return; }
-          var img = new Image();
-          img.onload = function () { frames[i] = img; if (cb) cb(); };
-          img.src = src(i);
-        }
-        load(0, function () { draw(0); });
-        if (reduced) return; // reduced motion: frame 0 only, no preload, no scroll-link
-        var order = [], i;
-        for (i = 0; i < m.frames; i += 4) order.push(i);
-        for (i = 0; i < m.frames; i++) if (i % 4) order.push(i);
-        order.forEach(function (idx) { load(idx); });
-      })
-      .catch(function () {}); // no manifest: canvas stays empty, overlay/poster stand
+    var frameCount = parseInt(canvas.getAttribute('data-frames'), 10) || 0;
+    var width = parseInt(canvas.getAttribute('data-width'), 10) || 0;
+    var height = parseInt(canvas.getAttribute('data-height'), 10) || 0;
+    var pattern = canvas.getAttribute('data-pattern') || 'frame-%04d.webp';
+    var base = canvas.getAttribute('data-frame-base') || '';
+    if (!frameCount || !width || !height) return null; // no manifest: poster/video stands
+
+    canvas.width = width;
+    canvas.height = height;
+
+    function src(i) { return base + pattern.replace('%04d', String(i + 1).padStart(4, '0')); }
+    function load(i, cb) {
+      if (frames[i]) { if (cb) cb(); return; }
+      var img = new Image();
+      img.onload = function () { frames[i] = img; if (cb) cb(); };
+      img.src = src(i);
+    }
+    load(0, function () { draw(0); }); // frame 0 = poster duty
+    if (!reduced) {                    // reduced motion: frame 0 only, no scroll-link
+      var order = [], i;
+      for (i = 0; i < frameCount; i += 4) order.push(i);
+      for (i = 0; i < frameCount; i++) if (i % 4) order.push(i);
+      order.forEach(function (idx) { load(idx); });
+    }
 
     function draw(i) {
       var f = frames[i] || nearestLoaded(i);
@@ -100,8 +108,8 @@
       return frames[0] || null;
     }
     return {
-      frameCount: function () { return manifest ? manifest.frames : 0; },
-      ready: function () { return !!manifest; },
+      frameCount: function () { return frameCount; },
+      ready: function () { return frameCount > 0; },
       drawFrame: function (i) { if (i !== current) draw(i); }
     };
   })();
