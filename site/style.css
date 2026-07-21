@@ -55,7 +55,19 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
 .hero-stage__media video,.hero-stage__media canvas{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;transition:opacity var(--duration-base) var(--ease-standard)}
 .hero-stage__media [data-hero-scrub]{opacity:0}
-.hero-stage__overlay{position:absolute;inset:0;
+/* Mobile portrait: the cover-crop hides the AC unit (it sits off-centre and pans
+   during the scrub). Track it via --hero-focus-x (set per scroll tick in
+   script.js) so it stays horizontally centred. object-position is deliberately
+   NOT transitioned — it must follow the scrub instantly, not ease. Desktop is
+   untouched (keeps 50% centre: AC right, hero text left). */
+@media (max-width:640px){
+  .hero-stage__media video,.hero-stage__media canvas{
+    object-position:var(--hero-focus-x,75%) center}
+}
+/* Scrim gradient is at its FULL (trust-legible) strength; script.js lightens it
+   via --scrim-opacity over the dark hero scene and ramps back to full as the
+   bright indoor trust scene scrolls in. Fallback 1 = full/safe for no-JS. */
+.hero-stage__overlay{position:absolute;inset:0;opacity:var(--scrim-opacity,1);
   background:linear-gradient(180deg,rgba(18,24,32,.80) 0%,rgba(18,24,32,.68) 50%,rgba(18,24,32,.80) 100%)}
 
 .hero-stage__layer{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column}
@@ -76,8 +88,11 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
   .hero-stage__layer--trust{margin-top:var(--space-6)}
 }
 
-/* hero content over the video */
+/* hero content over the video — text-shadow keeps it legible now that the
+   overlay scrim is lighter (matches the trust-stat treatment) */
 .hero__copy{max-width:44rem;padding-block:var(--space-10)}
+.hero__copy .eyebrow,.hero__copy h1,.hero-stage .hero__lede{
+  text-shadow:0 1px 6px rgba(0,0,0,.45)}
 .hero__copy .eyebrow{color:var(--color-ice-blue)}
 .hero__copy h1{color:var(--color-surface);margin-top:var(--space-3)}
 .hero__accent{color:var(--color-primary)}
@@ -94,6 +109,10 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
 }
 
 /* ---------- trust stats: borderless, floating on the video ---------- */
+.trust-heading{text-align:center;margin-bottom:var(--space-7)}
+.trust-heading .eyebrow{color:var(--color-ice-blue);text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.trust-heading h2{color:var(--color-surface);margin-top:var(--space-2);
+  text-shadow:0 1px 6px rgba(0,0,0,.45)}
 .trust-card{display:grid;gap:var(--space-5);
   grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));
   padding-block:var(--space-5)}

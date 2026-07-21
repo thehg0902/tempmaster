@@ -13,6 +13,7 @@
   var loopVideo = document.querySelector('[data-hero-loop]');
   var canvas = document.querySelector('[data-hero-scrub]');
   var wrapper = document.getElementById('hero-stage-wrapper');
+  var stage = document.getElementById('hero-stage');
   var heroLayer = document.getElementById('hero-layer');
   var trustLayer = document.getElementById('trust-layer');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -130,9 +131,24 @@
     var TRUST_END = 0.95;
     var HERO_TRAVEL = 70;      // px the hero drifts up while fading
     var TRUST_TRAVEL = 60;     // px the trust stats travel up from below
+    // Mobile-only focal tracking: the AC unit pans right->left across the scrub,
+    // so object-position-X is interpolated to keep it centered on a portrait
+    // crop. Published as --hero-focus-x; CSS applies it only under the mobile
+    // media query (desktop keeps its AC-right / text-left composition). Tune by
+    // eye — higher FOCUS_START = AC further right at the top of the scroll.
+    var FOCUS_START = 78, FOCUS_END = 31; // object-position % at scrubP 0 and 1
+    // Overlay scrim multiplier: lighter over the dark hero scene, ramping to
+    // full (1) over the bright indoor trust scene so the review text stays
+    // legible. base gradient is .80/.68/.80; SCRIM_HERO*base is the hero look.
+    var SCRIM_HERO = 0.70;
 
     var scrubActive = false; // whether the crossfade to canvas has happened
     var lastY = -1;
+
+    if (stage) {
+      stage.style.setProperty('--hero-focus-x', FOCUS_START + '%'); // pre-scroll paint
+      stage.style.setProperty('--scrim-opacity', String(SCRIM_HERO));
+    }
 
     function progress() {
       var rect = wrapper.getBoundingClientRect();
@@ -153,6 +169,19 @@
       trustLayer.style.transform = 'translateY(' + ((1 - trustP) * TRUST_TRAVEL) + 'px)';
       trustLayer.style.opacity = String(trustP);
 
+      // scrubP is valid whether or not the scrub is active yet: at rest it clamps
+      // to 0 (loop showing -> FOCUS_START, matching the loop/first frame). Drives
+      // both the mobile focal point (always) and the drawn frame (when active).
+      var scrubP = Math.min(1, Math.max(0, (p - SCRUB_START) / (SCRUB_END - SCRUB_START)));
+      if (stage) {
+        stage.style.setProperty('--hero-focus-x',
+          (FOCUS_START + (FOCUS_END - FOCUS_START) * scrubP).toFixed(1) + '%');
+        // scrim darkens with the scrub: SCRIM_HERO (light) -> 1 (full) as the
+        // bright trust scene comes in, keeping the review text legible.
+        stage.style.setProperty('--scrim-opacity',
+          (SCRIM_HERO + (1 - SCRIM_HERO) * scrubP).toFixed(3));
+      }
+
       if (scrub && scrub.ready() && loopVideo) {
         var shouldBeActive = p >= SCRUB_START;
         if (shouldBeActive !== scrubActive) {
@@ -166,9 +195,7 @@
           }
         }
         if (scrubActive) {
-          var scrubP = Math.min(1, Math.max(0, (p - SCRUB_START) / (SCRUB_END - SCRUB_START)));
-          var idx = Math.round(scrubP * (scrub.frameCount() - 1));
-          scrub.drawFrame(idx);
+          scrub.drawFrame(Math.round(scrubP * (scrub.frameCount() - 1)));
         }
       }
 
