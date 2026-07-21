@@ -109,6 +109,10 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
 }
 
 /* ---------- trust stats: borderless, floating on the video ---------- */
+.trust-heading{text-align:center;margin-bottom:var(--space-7)}
+.trust-heading .eyebrow{color:var(--color-ice-blue);text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.trust-heading h2{color:var(--color-surface);margin-top:var(--space-2);
+  text-shadow:0 1px 6px rgba(0,0,0,.45)}
 .trust-card{display:grid;gap:var(--space-5);
   grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));
   padding-block:var(--space-5)}
