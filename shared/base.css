@@ -62,14 +62,10 @@ button{font:inherit;background:none;border:0;cursor:pointer}
 .site-header__actions{display:flex;align-items:center;gap:var(--space-4)}
 .phone-link{display:flex;align-items:center;gap:var(--space-2);font-weight:700;
   font-family:var(--font-heading);font-size:var(--text-sm);color:var(--color-text);
-  min-width:44px;min-height:44px;justify-content:center}
+  min-height:44px;white-space:nowrap}
 .phone-link svg{color:var(--color-primary);flex:none}
-.phone-link__text{display:none}
+.phone-link__text{display:inline}   /* show the number on phone too (was icon-only) */
 .btn.site-header__cta{display:none}
-@media (min-width:560px){
-  .phone-link{justify-content:flex-start;min-width:0}
-  .phone-link__text{display:inline}
-}
 @media (min-width:900px){
   .primary-nav{display:block}
   .btn.site-header__cta{display:inline-flex}
@@ -179,18 +175,23 @@ button{font:inherit;background:none;border:0;cursor:pointer}
 .footer-privacy-link a{color:var(--color-text-muted)}
 .footer-privacy-link a:hover{color:var(--color-text);text-decoration:underline}
 
-/* ---------- sticky mobile call bar ---------- */
+/* ---------- sticky mobile call bar (hidden until scrolled past the hero) ---------- */
 .call-bar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;
   background:var(--color-surface);border-top:1px solid var(--color-border);
   box-shadow:var(--shadow-lg);
-  padding:var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom))}
+  padding:var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+  transform:translateY(120%)}
+.call-bar.is-visible{transform:translateY(0)}
+@media (prefers-reduced-motion: no-preference){
+  .call-bar{transition:transform var(--duration-base) var(--ease-out-expo)}
+}
 .call-bar a{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--space-2);
   font-family:var(--font-heading);font-weight:700;font-size:var(--text-sm);
-  border-radius:var(--radius-md);padding-block:var(--space-3);min-height:44px}
+  border-radius:var(--radius-md);padding-block:var(--space-3);min-height:44px;text-align:center}
 .call-bar a:active{transform:scale(.97)}
 .call-bar__call{background:var(--color-primary);color:var(--color-surface);
   margin-right:var(--space-2)}
-.call-bar__directions{border:2px solid var(--color-text);color:var(--color-text)}
+.call-bar__ask{border:2px solid var(--color-text);color:var(--color-text)}
 body{padding-bottom:76px}
 @media (min-width:900px){
   .call-bar{display:none}

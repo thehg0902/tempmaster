@@ -27,8 +27,9 @@
       done = true;
       loader.classList.add('is-done');
       document.body.classList.add('is-revealed');
-      // header slides in once the background is fully revealed (loader fade = 600ms)
-      setTimeout(function () { headerEl.classList.add('is-revealed'); }, reduced ? 0 : 1100);
+      // header slides in once the (slow, grand) loader fade has finished — the
+      // hero text float-up plays during the gap so the reveal feels staged.
+      setTimeout(function () { headerEl.classList.add('is-revealed'); }, reduced ? 0 : 1500);
     }
     if (reduced) { reveal(); return; }
     if (loopVideo && loopVideo.readyState >= 3) { reveal(); }

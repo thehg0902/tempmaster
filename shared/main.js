@@ -33,6 +33,22 @@
     });
   }
 
+  // sticky mobile call bar — reveal only after the visitor scrolls past the
+  // hero. On the home page that means past the pinned hero+trust stage; on
+  // other pages, after ~half a screen of scroll. Hidden at the top either way.
+  var callBar = document.querySelector('.call-bar');
+  if (callBar) {
+    var stageWrap = document.getElementById('hero-stage-wrapper');
+    var barThreshold = stageWrap
+      ? Math.max(0, stageWrap.offsetHeight - window.innerHeight)  // past the stage
+      : window.innerHeight * 0.5;
+    var onScrollBar = function () {
+      callBar.classList.toggle('is-visible', window.scrollY > barThreshold);
+    };
+    window.addEventListener('scroll', onScrollBar, { passive: true });
+    onScrollBar();
+  }
+
   // scroll-entrance reveals
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {

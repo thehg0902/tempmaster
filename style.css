@@ -4,10 +4,11 @@
 /* ---------- loading screen ---------- */
 .loader{position:fixed;inset:0;z-index:100;background:var(--color-charcoal);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-6);
-  transition:opacity var(--duration-slow) var(--ease-standard),
-    visibility 0s linear var(--duration-slow)}
+  transition:opacity var(--duration-grand) var(--ease-out-expo),
+    visibility 0s linear var(--duration-grand)}
 .loader.is-done{opacity:0;visibility:hidden}
-.loader img{height:72px;width:auto}
+.loader img{height:72px;width:auto;transition:transform var(--duration-grand) var(--ease-out-expo)}
+.loader.is-done img{transform:scale(1.08)} /* gentle push-in as it fades — grander reveal */
 .loader__line{width:min(220px,50vw);height:3px;border-radius:var(--radius-full);
   overflow:hidden;background:rgba(255,255,255,.12);position:relative}
 .loader__line::after{content:"";position:absolute;inset:0;border-radius:inherit;
@@ -35,7 +36,7 @@ html:not(.js) .loader{display:none}
 /* header entrance: hidden until the background is fully revealed */
 html.js .page-home .site-header{transform:translateY(-100%)}
 html.js .page-home .site-header.is-revealed{transform:translateY(0);
-  transition:transform var(--duration-slow) var(--ease-out-expo),
+  transition:transform var(--duration-grand) var(--ease-out-expo),
     background-color var(--duration-base) var(--ease-standard),
     border-color var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base) var(--ease-standard)}
@@ -99,13 +100,14 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
 .hero-stage .hero__lede{color:var(--color-mist)}
 .hero__copy .btn--outline{border-color:var(--color-surface);color:var(--color-surface)}
 
-/* float-up entrance sequence (runs after the loader fades) */
+/* float-up entrance sequence (runs after the loader fades) — slow, grand,
+   generously staggered so the hero settles in element by element */
 @media (prefers-reduced-motion: no-preference){
-  html.js .float-seq > *{opacity:0;transform:translateY(22px)}
+  html.js .float-seq > *{opacity:0;transform:translateY(38px) scale(.985)}
   html.js .is-revealed .float-seq > *{opacity:1;transform:none;
-    transition:opacity var(--duration-slow) var(--ease-out-expo),
-      transform var(--duration-slow) var(--ease-out-expo);
-    transition-delay:calc(var(--seq,0) * 140ms)}
+    transition:opacity var(--duration-grand) var(--ease-out-expo),
+      transform var(--duration-grand) var(--ease-out-expo);
+    transition-delay:calc(var(--seq,0) * var(--stagger-grand))}
 }
 
 /* ---------- trust stats: borderless, floating on the video ---------- */
@@ -178,8 +180,11 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
 .service-featured .btn{margin-top:var(--space-5)}
 .service-featured img{border-radius:var(--radius-md);width:100%;height:100%;
   aspect-ratio:16/10;object-fit:cover}
-.service-grid{display:grid;gap:var(--space-5);
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr))}
+/* Fixed column counts so the 6 cards are ALWAYS an even grid — 1 col (phone),
+   2×3 (tablet), 3×2 (desktop); never a ragged last row from auto-fit. */
+.service-grid{display:grid;gap:var(--space-5);grid-template-columns:1fr}
+@media (min-width:640px){.service-grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1024px){.service-grid{grid-template-columns:repeat(3,1fr)}}
 .service-grid .svc-icon{width:56px;height:56px;display:block;margin-bottom:var(--space-4);
   padding:var(--space-2);background:var(--color-ice-blue);border-radius:var(--radius-md)}
 .services-cta-line{margin-top:var(--space-7);color:var(--color-text-muted)}
