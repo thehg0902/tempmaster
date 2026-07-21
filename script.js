@@ -13,6 +13,7 @@
   var loopVideo = document.querySelector('[data-hero-loop]');
   var canvas = document.querySelector('[data-hero-scrub]');
   var wrapper = document.getElementById('hero-stage-wrapper');
+  var stage = document.getElementById('hero-stage');
   var heroLayer = document.getElementById('hero-layer');
   var trustLayer = document.getElementById('trust-layer');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -130,9 +131,17 @@
     var TRUST_END = 0.95;
     var HERO_TRAVEL = 70;      // px the hero drifts up while fading
     var TRUST_TRAVEL = 60;     // px the trust stats travel up from below
+    // Mobile-only focal tracking: the AC unit pans right->left across the scrub,
+    // so object-position-X is interpolated to keep it centered on a portrait
+    // crop. Published as --hero-focus-x; CSS applies it only under the mobile
+    // media query (desktop keeps its AC-right / text-left composition). Tune by
+    // eye — higher FOCUS_START = AC further right at the top of the scroll.
+    var FOCUS_START = 78, FOCUS_END = 31; // object-position % at scrubP 0 and 1
 
     var scrubActive = false; // whether the crossfade to canvas has happened
     var lastY = -1;
+
+    if (stage) stage.style.setProperty('--hero-focus-x', FOCUS_START + '%'); // pre-scroll paint
 
     function progress() {
       var rect = wrapper.getBoundingClientRect();
@@ -153,6 +162,15 @@
       trustLayer.style.transform = 'translateY(' + ((1 - trustP) * TRUST_TRAVEL) + 'px)';
       trustLayer.style.opacity = String(trustP);
 
+      // scrubP is valid whether or not the scrub is active yet: at rest it clamps
+      // to 0 (loop showing -> FOCUS_START, matching the loop/first frame). Drives
+      // both the mobile focal point (always) and the drawn frame (when active).
+      var scrubP = Math.min(1, Math.max(0, (p - SCRUB_START) / (SCRUB_END - SCRUB_START)));
+      if (stage) {
+        stage.style.setProperty('--hero-focus-x',
+          (FOCUS_START + (FOCUS_END - FOCUS_START) * scrubP).toFixed(1) + '%');
+      }
+
       if (scrub && scrub.ready() && loopVideo) {
         var shouldBeActive = p >= SCRUB_START;
         if (shouldBeActive !== scrubActive) {
@@ -166,9 +184,7 @@
           }
         }
         if (scrubActive) {
-          var scrubP = Math.min(1, Math.max(0, (p - SCRUB_START) / (SCRUB_END - SCRUB_START)));
-          var idx = Math.round(scrubP * (scrub.frameCount() - 1));
-          scrub.drawFrame(idx);
+          scrub.drawFrame(Math.round(scrubP * (scrub.frameCount() - 1)));
         }
       }
 

@@ -55,6 +55,15 @@ html.js .page-home .site-header.is-revealed{transform:translateY(0);
 .hero-stage__media video,.hero-stage__media canvas{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;transition:opacity var(--duration-base) var(--ease-standard)}
 .hero-stage__media [data-hero-scrub]{opacity:0}
+/* Mobile portrait: the cover-crop hides the AC unit (it sits off-centre and pans
+   during the scrub). Track it via --hero-focus-x (set per scroll tick in
+   script.js) so it stays horizontally centred. object-position is deliberately
+   NOT transitioned — it must follow the scrub instantly, not ease. Desktop is
+   untouched (keeps 50% centre: AC right, hero text left). */
+@media (max-width:640px){
+  .hero-stage__media video,.hero-stage__media canvas{
+    object-position:var(--hero-focus-x,75%) center}
+}
 .hero-stage__overlay{position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(18,24,32,.80) 0%,rgba(18,24,32,.68) 50%,rgba(18,24,32,.80) 100%)}
 
